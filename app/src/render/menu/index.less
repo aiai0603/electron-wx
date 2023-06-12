@@ -1,0 +1,40 @@
+.menu-layout {
+  display: flex;
+  height: 100%;
+  flex-flow: column;
+  justify-content: space-between;
+
+  .menu-avatar {
+    display: flex;
+    flex-flow: row;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+
+  }
+
+  .menu-link {
+    display: flex;
+    flex-flow: row;
+    justify-content: center;
+    align-items: center;
+    width: 56px;
+    height: 48px;
+    font-size: 24px;
+
+    .unactive {
+      &:hover {
+        color: #f5f5f5;
+      }
+      color: #bfbfbf;
+    }
+
+    .active {
+      color: #69b1ff;
+    }
+  }
+
+  .menu-bottom{
+    margin-bottom: 24px;
+  }
+}

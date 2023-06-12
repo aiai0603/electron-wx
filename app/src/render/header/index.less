@@ -1,0 +1,39 @@
+.header {
+  display: flex;
+  background-color: transparent;
+  justify-content: space-between;
+  // 允许拖动应用
+  -webkit-app-region: drag;
+
+  &-left{
+    width: 305px;
+    text-align: left;
+    border-right: #d9d9d9 1px solid;
+
+    &-main{
+      background-color: transparent;
+      width: 56px;
+      .header-left-span{
+        background-color: transparent;
+      }
+
+     
+    }
+    &-span{
+      height: 100%;
+      background-color: #434343;
+      width: 56px;
+
+    }
+  }
+
+  span {
+    font-size: 14px;
+    padding:8px;
+    -webkit-app-region: no-drag;
+
+    :hover{
+      background-color: #eee;
+    }
+  }
+}

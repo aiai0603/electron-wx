@@ -1,0 +1,106 @@
+import { useNavigate, useLocation } from "react-router-dom";
+import { Button, Form, Input, Checkbox, Avatar } from "antd";
+import { LockOutlined, UserOutlined } from "@ant-design/icons";
+import chatLogo from "@/render/assets/2x.png";
+import { useAuth } from "@/render/auth/auth";
+import "./index.less";
+
+function Login() {
+  let navigate = useNavigate();
+  let location = useLocation();
+  let auth = useAuth();
+
+  const onFinish = (values: any) => {
+    let from = location.state?.from?.pathname || "/";
+    auth.signin(values.username, () => {
+      navigate(from, { replace: true });
+    });
+  };
+
+  return (
+    <div className="login-page">
+      <div className="logo-section">
+        <div>
+          <a target="_blank" href="https://github.com/aiai0603">
+            <img src={chatLogo} className="logo" alt="logo" />
+          </a>
+        </div>
+
+        <h1>Fishing Chat</h1>
+      </div>
+
+      <div className="login-section">
+        <div className="login-avatar">
+          <Avatar
+            size={90}
+            icon={<UserOutlined rev={undefined} />}
+            className="my-avatar"
+          />
+        </div>
+        <Form
+          name="normal_login"
+          className="login-form"
+          initialValues={{ remember: true }}
+          onFinish={onFinish}
+        >
+          <Form.Item
+            name="username"
+            rules={[{ required: true, message: "Please input your Username!" }]}
+          >
+            <Input
+              prefix={
+                <UserOutlined className="site-form-item-icon" rev={undefined} />
+              }
+              placeholder="Username"
+            />
+          </Form.Item>
+
+          <Form.Item
+            name="password"
+            rules={[{ required: true, message: "Please input your Password!" }]}
+          >
+            <Input.Password
+              prefix={
+                <LockOutlined className="site-form-item-icon" rev={undefined} />
+              }
+              type="password"
+              placeholder="Password"
+            />
+          </Form.Item>
+
+          <div className="login-form-remember">
+            <Form.Item
+              name="remember"
+              valuePropName="checked"
+            >
+              <Checkbox>Remember me</Checkbox>
+            </Form.Item>
+            <Button
+              type="link"
+            >
+              Forgrt Password
+            </Button>
+          </div>
+          <Form.Item>
+            <Button
+              type="primary"
+              htmlType="submit"
+              className="login-form-button"
+            >
+              Log in
+            </Button>
+            <Button
+              type="link"
+              className="register-button"
+            >
+              Do not Have a Account ? Click here to register
+            </Button>
+          </Form.Item>
+
+        </Form>
+      </div>
+    </div>
+  );
+}
+
+export default Login;
