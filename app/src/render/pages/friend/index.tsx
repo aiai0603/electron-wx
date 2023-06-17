@@ -1,99 +1,86 @@
-import React, { useEffect, useState } from "react";
-import { Button, Space, message, Card, Typography } from "antd";
+import { useState, type FC } from "react";
+import { Avatar, Card, Skeleton, Statistic, Divider, Input } from "antd";
+import "./index.less";
+import { UserAddOutlined, SearchOutlined } from "@ant-design/icons";
+import { createFromIconfontCN } from "@ant-design/icons";
 
-const Communication = () => {
-  // Open the browser for one-way communication
-  const openUrlByDefaultBrowser = () => {
-    window.nativeBridge.openUrlByDefaultBrowser("https://www.baidu.com");
-  };
-  // Asynchronous bidirectional communication.
-  const communicateWithEachOtherSendMsg = () => {
-    window.nativeBridge.communicateWithEachOtherSendMsg("Hello");
-  };
-  // Synchronous bidirectional communication.
-  const communicateWithEachOtherSendMsgSendSync = () => {
-    const msg =
-      window.nativeBridge.communicateWithEachOtherSendMsgSendSync("Hello sync");
-    message.info(msg);
-  };
-  // Bidirectional communication with Promise
-  const communicateWithEachOtherSendMsgPromise = () => {
-    window.nativeBridge
-      .communicateWithEachOtherSendMsgPromise("Hello Promise")
-      .then((msg: any) => {
-        message.info(msg);
-      });
-  };
+const IconFont = createFromIconfontCN({
+  scriptUrl: ["//at.alicdn.com/t/c/font_3876279_f9c77gdokpi.js"],
+});
 
-  const sendMsgToWork = () => {
-    window.nativeBridge.renderSendMsgToWork("I am render");
-  };
+function FriendList() {
+  const [search, useSearch] = useState(false);
 
-  const sendMsgToWorkByMessagePort = () => {
-    window.nativeBridge.renderSendMsgToWorkByMessagePort(
-      "I am render, sendMsgToWorkByMessagePort"
-    );
+  const onChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    useSearch(true);
   };
-
-  const [count, setCount] = useState<number>(0);
-  useEffect(() => {
-    window.nativeBridge.onUpdateCounterByMain((e: Event, value: any) => {
-      console.log("a", value);
-      setCount((pre: number) => {
-        console.log(pre);
-        return pre + value;
-      });
-    });
-  }, []);
 
   return (
-    <div>
-      <div style={{ fontSize: "20px" }}>
-        Examples of interprocess communication
+    <div className="friend-list">
+      <div className="friend-list-header">
+        <Input
+          className="friend-search"
+          placeholder="search"
+          prefix={<SearchOutlined rev={undefined} />}
+          allowClear
+          onChange={onChange}
+        />
+        <div className="friend-plus">
+          <UserAddOutlined rev={undefined} />
+        </div>
       </div>
-      <Card style={{ marginTop: "20px" }} title="Render send msg to main">
-        <Button onClick={openUrlByDefaultBrowser}>
-          openUrlByDefaultBrowser
-        </Button>
-      </Card>
-      <Card
-        style={{ marginTop: "20px" }}
-        title="Render send msg to main has replay"
-      >
-        <Space wrap>
-          <Button onClick={communicateWithEachOtherSendMsg}>
-            communicateWithEachOtherSendMsg
-          </Button>
-          <Button onClick={communicateWithEachOtherSendMsgSendSync}>
-            communicateWithEachOtherSendMsgSendSync
-          </Button>
-          <Button onClick={communicateWithEachOtherSendMsgPromise}>
-            communicateWithEachOtherSendMsgPromise
-          </Button>
-        </Space>
-      </Card>
-      <Card style={{ marginTop: "20px" }} title="Render send msg to work">
-        <Space wrap>
-          <Button onClick={sendMsgToWork}>
-            sendMsgToWork
-          </Button>
-          <Button onClick={sendMsgToWorkByMessagePort}>
-            sendMsgToWorkByMessagePort
-          </Button>
-        </Space>
-      </Card>
-
-      <Card style={{ marginTop: "20px" }} title="Get msg form main">
-        <div>
-          You can click on the IncrementNumber option in the application's menu
-          bar to increase the number below.
+      {search ? (
+        <div className="friend-search-result"></div>
+      ) : (
+        <div className="friend-list-cards">
+          <div className="friend-list-title">系统功能</div>
+          <FriendCard></FriendCard>
+          <FriendCard></FriendCard>
+          <FriendCard></FriendCard>
+          <div className="friend-list-title title-divide">群聊</div>
+          <FriendCard></FriendCard>
+          <FriendCard></FriendCard>
+          <FriendCard></FriendCard>
+          <div className="friend-list-title title-divide">联系人</div>
+          <FriendCard></FriendCard>
+          <FriendCard></FriendCard>
+          <FriendCard></FriendCard>
+          <FriendCard></FriendCard>
+          <FriendCard></FriendCard>
+          <FriendCard></FriendCard>
         </div>
-        <div style={{fontSize:'18px'}}>
-          count is <span style={{ color: "red" }}>{count}</span>
-        </div>
-      </Card>
+      )}
     </div>
   );
-};
+}
 
-export default Communication;
+function FriendCard(prop: any) {
+  return (
+    <div className="card-page">
+      <div className="card-left">
+        <div className="card-img"></div>
+      </div>
+      <div className="card-right">
+        <div className="card-title">
+          这是一个非常非常非常非111常非常非常长的标题
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function FriendMain(prop: any) {
+  return <div className="friend-main"></div>;
+}
+
+function Friend() {
+  return (
+    <div className="friend-page">
+      <FriendList></FriendList>
+      <FriendMain></FriendMain>
+    </div>
+  );
+}
+export default Friend;
