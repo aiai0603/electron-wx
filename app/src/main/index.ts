@@ -1,7 +1,6 @@
 import {
   app,
   BrowserWindow,
-  Menu,
   MessageChannelMain,
 } from "electron";
 import { join, resolve } from "path";

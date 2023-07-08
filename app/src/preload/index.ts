@@ -55,6 +55,14 @@ contextBridge.exposeInMainWorld("headerApi", {
 });
 
 
+contextBridge.exposeInMainWorld("loginApi", {
+  openEegister: () => {
+    ipcRenderer.send("open-register");
+  },
+});
+
+
+
 
 ipcRenderer.on("communicateWithEachOtherReply", (_event, arg) => {
   alert(arg)

@@ -4,6 +4,7 @@ declare global {
     nativeBridge: any;
     electronMessagePort:any;
     headerApi:any;
+    loginApi:any;
   }
 }
 

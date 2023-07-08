@@ -1,4 +1,5 @@
-import { ipcMain, IpcMainEvent, shell } from "electron";
+import { BrowserWindow, ipcMain, IpcMainEvent, shell } from "electron";
+import { join, resolve } from "path";
 // import { callNativeSumByDylib,callNativeSumByRustnode,callNativeSubtractionByRustnode } from "../native";
 
 const openUrlByDefaultBrowser = (e: IpcMainEvent, args: any) => {
@@ -44,5 +45,21 @@ export const initIpc = (mainWindow: any, workWindow: any) => {
   });
   ipcMain.on("window-close", () => {
     mainWindow.destroy();
+  });
+
+  ipcMain.on("open-register", () => {
+
+    let registerWindow = new BrowserWindow({
+      width: 720,
+      height: 640,
+      webPreferences: {
+        contextIsolation: true,
+        nodeIntegration: true,
+        preload: join(__dirname, "../work/index.cjs"),
+      },
+    });
+    registerWindow.setMenu(null);   
+    registerWindow.webContents.openDevTools()
+    registerWindow.loadURL(import.meta.env.VITE_DEV_SERVER_URL+"register?child=0");
   });
 };

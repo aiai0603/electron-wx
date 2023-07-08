@@ -9,7 +9,7 @@ import {
 import Chat from "../pages/chat";
 import Friend from "../pages/friend";
 import Login from "../pages/login";
-
+import Register from "../pages/register";
 const routes = [
   {
     path: "/login",
@@ -22,6 +22,12 @@ const routes = [
     type: "hidden",
     element: <Login />,
     key:"用户信息"
+  },
+  {
+    path: "/register",
+    type: "hidden",
+    element: <Register />,
+    key:"注册"
   },
   {
     path: "/",

@@ -17,6 +17,10 @@ function Login() {
     });
   };
 
+  const onHandleRegister = () => {
+    window.loginApi.openEegister();
+  }
+
   return (
     <div className="login-page">
       <div className="logo-section">
@@ -92,6 +96,7 @@ function Login() {
             <Button
               type="link"
               className="register-button"
+              onClick={ () => onHandleRegister()}
             >
               Do not Have a Account ? Click here to register
             </Button>

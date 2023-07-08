@@ -4,6 +4,9 @@ import { AuthStatus } from "@/render/auth/auth";
 
 function MyHeader() {
 
+  const searchParams = new URLSearchParams(window.location.search);
+  const child = searchParams.get('child');
+
   const handleMin = () => {
     window.headerApi.handleMin();
   } 
@@ -14,6 +17,7 @@ function MyHeader() {
     window.headerApi.handleClose();
   } 
   return (
+    (child !== "0") ? (
     <div className="header">
       <div className={ AuthStatus() ?'header-left': 'header-left-main'}    >
 
@@ -28,6 +32,7 @@ function MyHeader() {
         <span onClick={() => {  handleClose() }}> <CloseOutlined rev={undefined} /> </span>
       </div>
     </div>
+    ) : (<div className="header"></div>)
   );
 }
 
