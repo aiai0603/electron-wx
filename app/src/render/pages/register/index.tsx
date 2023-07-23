@@ -1,8 +1,13 @@
 import { useNavigate, useLocation } from "react-router-dom";
-import { Button, Form, Input, Radio, Cascader } from "antd";
+import { Button, Form, Input, Radio, Cascader, Select } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
+import { JSEncrypt } from "jsencrypt";
 import "./index.less";
 import { useEffect, useRef, useState } from "react";
+import Request from "../../http/axios";
+
+const { Option } = Select;
+
 interface Option {
   value: string | number;
   label: string;
@@ -44,9 +49,53 @@ const options: Option[] = [
   },
 ];
 
+const prefixSelector = (
+  <Form.Item name="prefix" noStyle>
+    <Select style={{ width: 70 }} defaultValue="86">
+      <Option value="86">+86</Option>
+      <Option value="87">+87</Option>
+    </Select>
+  </Form.Item>
+);
+
 function Register() {
-  let location = useLocation();
+  const [form] = Form.useForm();
+
   const scode = useRef(null);
+
+  const onFinish = (values: any) => {
+    var encrypt = new JSEncrypt();
+    encrypt.setPublicKey("123456");
+
+    let userInfo = {
+      userName: values.userName,
+      userNickName: values.userName,
+      userPassword: encrypt.encrypt(values.userPassword),
+      userPhone: values.userPhone,
+      userAvater:
+        "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fci.xiaohongshu.com%2F609d2a7d-2432-0cd7-0807-92ba965965c5%3FimageView2%2F2%2Fw%2F1080%2Fformat%2Fjpg&refer=http%3A%2F%2Fci.xiaohongshu.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1692691143&t=3492b26b1168a700841240ac277fff12",
+      userSex: values.userSex,
+      userLocal: values.userLocal.join(" "),
+    };
+
+    Request({
+      url: "http://localhost:3000/user",
+      method: "post",
+      data: userInfo,
+    })
+      .then((res) => {
+        console.log(res)
+      })
+      .catch((err) => {
+        console.log(err)
+      });
+  };
+
+  const onReset = () => {
+    form.resetFields();
+    changeAns();
+  };
+
   const [ansCode, setAnsCode] = useState(["1", "2", "3", "4"]);
 
   const changeAns = () => {
@@ -64,12 +113,8 @@ function Register() {
     setAnsCode(value);
   };
 
-  const onFinish = (values: any) => {
-    let from = location.state?.from?.pathname || "/";
-  };
-
   const code_draw = (canvas: any) => {
-    var context = canvas.getContext("2d"); //获取到canvas画图的环境，演员表演的舞台
+    var context = canvas.getContext("2d"); //获取到canvas画图的环境
     canvas.width = 100;
     canvas.height = 32;
     for (var i = 0; i < ansCode.length; i++) {
@@ -114,6 +159,7 @@ function Register() {
   };
 
   useEffect(() => {
+    console.log(111);
     if (scode.current != null) {
       code_draw(scode.current);
     }
@@ -127,6 +173,7 @@ function Register() {
     <div className="register-page">
       <div className="register-title"> 注册账号 </div>
       <Form
+        form={form}
         name="normal_login"
         className="register-form"
         initialValues={{ remember: true }}
@@ -135,15 +182,15 @@ function Register() {
         labelAlign="left"
       >
         <Form.Item
-          name="nickName"
-          label="nickName"
+          name="userName"
+          label="userName"
           rules={[{ required: true, message: "Please input your Username!" }]}
         >
-          <Input placeholder="nickName" />
+          <Input placeholder="userName" />
         </Form.Item>
 
         <Form.Item
-          name="password"
+          name="userPassword"
           label="password"
           rules={[{ required: true, message: "Please input your Password!" }]}
         >
@@ -155,13 +202,45 @@ function Register() {
           label="confirm"
           rules={[
             { required: true, message: "Please input your Password again!" },
+            ({ getFieldValue }) => ({
+              validator(_, value) {
+                if (!value || getFieldValue("userPassword") === value) {
+                  return Promise.resolve();
+                }
+                return Promise.reject(
+                  new Error("The new password that you entered do not match!")
+                );
+              },
+            }),
           ]}
         >
           <Input.Password type="password" placeholder="Password" />
         </Form.Item>
 
         <Form.Item
-          name="local"
+          name="userPhone"
+          label="Phone"
+          rules={[
+            { required: true, message: "Please input your phone number!" },
+            () => ({
+              validator(_, value) {
+                var re = /^1\d{10}$/;
+                if (re.test(value)) {
+                  return Promise.resolve();
+                } else {
+                  return Promise.reject(
+                    new Error("The Phone number that you entered do not correct!")
+                  );
+                }
+              },
+            }),
+          ]}
+        >
+          <Input addonBefore={prefixSelector} maxLength={11} style={{ width: "100%" }} />
+        </Form.Item>
+
+        <Form.Item
+          name="userLocal"
           label="location"
           rules={[{ required: true, message: "Please choose your location!" }]}
         >
@@ -169,7 +248,7 @@ function Register() {
         </Form.Item>
 
         <Form.Item
-          name="sex"
+          name="userSex"
           label="gender"
           rules={[{ required: true, message: "Please choose your sex!" }]}
         >
@@ -183,11 +262,28 @@ function Register() {
         <Form.Item
           name="code"
           label="Verification"
-          rules={[{ required: true, message: "Please input code!" }]}
+          rules={[
+            { required: true, message: "Please input code!" },
+            () => ({
+              validator(_, value) {
+                if (!value || ansCode.join("").toLowerCase() == value) {
+                  return Promise.resolve();
+                }
+                return Promise.reject(
+                  new Error("The new code that you entered do not match!")
+                );
+              },
+            }),
+          ]}
         >
           <div className="register-verification">
-            <Input placeholder="code" />
-            <canvas ref={scode} className="resgister-code"></canvas>
+            <Input placeholder="code" maxLength={4} />
+            <canvas
+              ref={scode}
+              className="resgister-code"
+              width="100"
+              height="32"
+            ></canvas>
             <div
               className="resgister-code-change"
               onClick={() => {
@@ -208,7 +304,7 @@ function Register() {
             >
               Submit
             </Button>
-            <Button htmlType="reset" className="register-button-item">
+            <Button className="register-button-item" onClick={onReset}>
               Reset
             </Button>
           </div>
