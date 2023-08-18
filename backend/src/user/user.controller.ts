@@ -22,11 +22,13 @@ export class UserController {
 
   @Post()
   async create(@Body() createUserDto: CreateUserDto) {
-    let re = await this.userService.create(createUserDto);
-    if (true) {
-      throw new UserException(10001, '1111');
-    }
 
+    if(await this.userService.findByName(createUserDto.userNickName) > 0){
+      throw new UserException(10001, '用户名重复');
+    }
+    
+    let re = await this.userService.create(createUserDto);
+  
     return re.userId;
   }
 

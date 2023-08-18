@@ -47,19 +47,27 @@ export const initIpc = (mainWindow: any, workWindow: any) => {
     mainWindow.destroy();
   });
 
+  let registerWindow: BrowserWindow | null = null;
+
   ipcMain.on("open-register", () => {
 
-    let registerWindow = new BrowserWindow({
+    registerWindow = new BrowserWindow({
       width: 720,
       height: 640,
       webPreferences: {
         contextIsolation: true,
         nodeIntegration: true,
-        preload: join(__dirname, "../work/index.cjs"),
+        preload: join(__dirname, "../preload/index.cjs"),
       },
     });
     registerWindow.setMenu(null);   
     registerWindow.webContents.openDevTools()
     registerWindow.loadURL(import.meta.env.VITE_DEV_SERVER_URL+"register?child=0");
+  });
+
+
+  ipcMain.on("close-register", () => {
+
+    registerWindow  && registerWindow.destroy();
   });
 };

@@ -10,7 +10,6 @@
     justify-content: center;
     align-items: center;
     margin-bottom: 20px;
-
   }
 
   .menu-link {
@@ -34,7 +33,83 @@
     }
   }
 
-  .menu-bottom{
+  .menu-bottom {
     margin-bottom: 24px;
+  }
+}
+
+.msg-card {
+  display: flex;
+  flex-flow: column;
+  height: 100%;
+  width: 250px;
+
+  .msg-avater {
+    width: 64px;
+    height: 64px;
+    border-radius: 4px;
+    object-fit: fill;
+  }
+
+  .msg-top {
+    display: flex;
+    flex-flow: row;
+  }
+
+  .msg-info {
+    margin-left: 20px;
+    display: flex;
+    flex-flow: column;
+    flex:1;
+    height: 100%;
+    overflow: hidden;
+
+    .msg-title{
+      display: flex;
+      flex-flow: row;
+    }
+
+    p {
+      width: 150px;
+      display: flex;
+      word-break:break-all;
+      display:-webkit-box;
+      -webkit-line-clamp:1;
+      -webkit-box-orient:vertical;
+      overflow:hidden;
+      font-size: 12px;
+      margin: 0px;
+      line-height: 20px;
+      color:#8c8c8c;
+    }
+
+    .nick-sex{
+      color: blue;
+      margin-left: 2px;
+    }
+
+    .nick-sex2{
+      color: palevioletred;
+      margin-left: 2px;
+    }
+
+    .nick{
+      width: 130px;
+      font-size: 14px;
+      line-height: 24px;
+      color: #141414;
+
+    }
+  }
+
+  .msg-button {
+    width: 100%;
+    text-align: center;
+  }
+
+  .msg-divide{
+    border: 1px solid #f0f0f0;
+    margin: 16px 0;
+
   }
 }

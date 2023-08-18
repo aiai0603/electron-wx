@@ -56,8 +56,11 @@ contextBridge.exposeInMainWorld("headerApi", {
 
 
 contextBridge.exposeInMainWorld("loginApi", {
-  openEegister: () => {
+  openRegister: () => {
     ipcRenderer.send("open-register");
+  },
+  closeRegister: () => {
+    ipcRenderer.send("close-register");
   },
 });
 

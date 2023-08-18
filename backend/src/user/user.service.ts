@@ -7,29 +7,30 @@ import { Repository } from 'typeorm';
 
 @Injectable()
 export class UserService {
-
   constructor(
-    @InjectRepository(ChatUser) private userRepository: Repository<ChatUser>
-  ){}
+    @InjectRepository(ChatUser) private userRepository: Repository<ChatUser>,
+  ) {}
 
   create(CreateUserDto: CreateUserDto) {
-
     let createUser = {
       ...CreateUserDto,
-      deleteFlag:0,
-      userOnline:0,
-      userLevel:"0",
-      userSign:"",
-      signTime: new Date()
-
-    }
+      deleteFlag: 0,
+      userOnline: 0,
+      userLevel: '0',
+      userSign: '',
+      signTime: new Date(),
+    };
 
     return this.userRepository.save(createUser);
   }
 
   findAll() {
     return this.userRepository.find();
-    
+  }
+
+  findByName(name: string) {
+    let qb = this.userRepository.createQueryBuilder();
+    return qb.where('user_nick_name = :name', { name: name }).getCount();
   }
 
   findOne(id: number) {
@@ -37,7 +38,7 @@ export class UserService {
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {
-    return this.userRepository.update(id,updateUserDto)
+    return this.userRepository.update(id, updateUserDto);
   }
 
   remove(id: number) {

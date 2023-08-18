@@ -1,27 +1,37 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { InjectRepository } from '@nestjs/typeorm';
+import { UserException } from 'common/UserException';
+import { ChatUser } from 'src/entities/ChatUser.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class AuthService {
-    constructor(
-        private readonly jwtService: JwtService,
-      ) {}
+  constructor(
+    private readonly jwtService: JwtService,
+    @InjectRepository(ChatUser) private userRepository: Repository<ChatUser>,
+  ) {}
 
-  async createToken(user: { name: any; password: any; }) {
+  async createToken(user: { name: any; password: any }) {
     const payload = { username: user.name, password: user.password };
-    //在实际项目中一般要进行数据库验证查看用户用户名密码是否正确
-    //const data = await this.userRepository.findOne({username:user.username, password: user.password})
-    //if(!data) {
-    // return {code: 1 , msg:'登录失败', data: ''}
-    //}
-    delete user.password;
-    return {
-      msg: '登录成功',
-      data: {
-        user: user,
-        //得到token
-        token: this.jwtService.sign(payload),
+    const data = await this.userRepository.findOne({
+      where: {
+        userName: user.name,
+        userPassword: user.password,
       },
-    };
+    });
+
+    if (!data) {
+      throw new UserException(10001, '账号或者密码错误');
+    } else {
+      delete data.userPassword;
+      return {
+        msg: '登录成功',
+        data: {
+          user: data,
+          token: this.jwtService.sign(payload),
+        },
+      };
+    }
   }
 }

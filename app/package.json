@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "axios": "^1.4.0",
+    "crypto-js": "^4.1.1",
     "fs-extra": "^11.1.0",
     "jsencrypt": "^3.3.2",
     "re-resizable": "^6.9.9",
@@ -20,6 +21,7 @@
   "devDependencies": {
     "@ant-design/icons": "^5.1.4",
     "@ant-design/pro-layout": "^7.14.3",
+    "@types/crypto-js": "^4.1.1",
     "@types/node": "^18.13.0",
     "@types/react": "^18.0.27",
     "@types/react-dom": "^18.0.10",

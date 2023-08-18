@@ -10,24 +10,25 @@ import Chat from "../pages/chat";
 import Friend from "../pages/friend";
 import Login from "../pages/login";
 import Register from "../pages/register";
+import Setting from "../pages/setting";
 const routes = [
   {
     path: "/login",
     type: "hidden",
     element: <Login />,
-    key:"登录"
+    key: "登录",
   },
   {
     path: "/user",
     type: "hidden",
     element: <Login />,
-    key:"用户信息"
+    key: "用户信息",
   },
   {
     path: "/register",
     type: "hidden",
     element: <Register />,
-    key:"注册"
+    key: "注册",
   },
   {
     path: "/",
@@ -36,7 +37,7 @@ const routes = [
     activeIcon: <MessageFilled rev={undefined} />,
     element: <Chat />,
     auth: true,
-    key:"消息"
+    key: "消息",
   },
   {
     path: "/communication",
@@ -45,16 +46,16 @@ const routes = [
     activeIcon: <ContactsFilled rev={undefined} />,
     element: <Friend />,
     auth: true,
-    key:"联系人"
+    key: "联系人",
   },
   {
     path: "/setting",
     type: "bottom",
     icon: <SettingOutlined rev={undefined} />,
     activeIcon: <SettingFilled rev={undefined} />,
-    element: <Friend />,
+    element: <Setting />,
     auth: true,
-    key:"设置"
+    key: "设置",
   },
 ];
 

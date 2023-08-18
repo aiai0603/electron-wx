@@ -13,7 +13,6 @@ export class HttpExceptionFilter implements ExceptionFilter {
   // exception 当前正在处理的异常对象
   // host 是传递给原始处理程序的参数的一个包装(Response/Request)的引用
   catch(exception: HttpException, host: ArgumentsHost) {
-    console.log('进入全局异常过滤器...');
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();

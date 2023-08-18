@@ -4,6 +4,8 @@ import { AuthStrategy } from './auth.strategy';
 import { AuthController } from './auth.controller';
 import { JwtModule } from '@nestjs/jwt';
 import { jwtKey } from './key';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { ChatUser } from 'src/entities/ChatUser.entity';
 
 @Module({
   imports: [
@@ -17,6 +19,7 @@ import { jwtKey } from './key';
         expiresIn: jwtKey.expiresIn,
       },
     }),
+    TypeOrmModule.forFeature([ChatUser]),
   ],
   providers: [AuthService, AuthStrategy],
   controllers: [AuthController],
