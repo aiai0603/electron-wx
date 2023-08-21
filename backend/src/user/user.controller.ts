@@ -10,6 +10,7 @@ import {
   HttpStatus,
   UseFilters,
   ForbiddenException,
+  Put,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -38,11 +39,15 @@ export class UserController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    let re = await this.userService.findOne(+id)
+    if(re == null){
+      throw new UserException(10404, '找不到用户');
+    }
+    return re;
   }
 
-  @Patch(':id')
+  @Put(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.userService.update(+id, updateUserDto);
   }

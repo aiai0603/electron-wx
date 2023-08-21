@@ -4,16 +4,21 @@ import {
   Cascader,
   Form,
   Input,
+  Modal,
   Radio,
   Select,
   Tabs,
+  Upload,
+  UploadFile,
   message,
 } from "antd";
 import "./index.less";
-import { SettingOutlined } from "@ant-design/icons";
-import { useState } from "react";
+import { PlusOutlined, SettingOutlined } from "@ant-design/icons";
+import { useEffect, useState } from "react";
 import MD5 from "crypto-js/md5";
-import Request from "../../http/axios";
+import { Request, baseURL } from "../../http/axios";
+import { useAuth } from "@/render/auth/auth";
+import { RcFile, UploadProps } from "antd/es/upload";
 
 const { Option } = Select;
 
@@ -67,24 +72,101 @@ const prefixSelector = (
   </Form.Item>
 );
 
+const getBase64 = (file: RcFile): Promise<string> =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = (error) => reject(error);
+  });
+
 function PrivateMsg() {
   const [form] = Form.useForm();
+  let auth = useAuth();
+  let [user, setUser] = useState({});
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewImage, setPreviewImage] = useState("");
+  const [previewTitle, setPreviewTitle] = useState("");
+
+  const [fileList, setFileList] = useState<UploadFile[]>([]);
+
+  const handleCancel = () => setPreviewOpen(false);
+
+  const handlePreview = async (file: UploadFile) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj as RcFile);
+    }
+
+    setPreviewImage(file.url || (file.preview as string));
+    setPreviewOpen(true);
+    setPreviewTitle(
+      file.name || file.url!.substring(file.url!.lastIndexOf("/") + 1)
+    );
+  };
+
+  const handleChange: UploadProps["onChange"] = ({
+    fileList: newFileList,
+    file: newfile,
+  }) => {
+    if (newfile.status == "done") {
+      newFileList[0].url = baseURL + "/" + newfile.response.data;
+    }
+    setFileList(newFileList);
+  };
+
+  const getData = () => {
+    let id = auth.user.user.userId;
+    Request({
+      url: "/user/" + id,
+      method: "get",
+    })
+      .then(async (res: any) => {
+        if (res && res.code == "200") {
+          let data = res.data;
+          setUser({
+            userName: data.userNickName,
+            userLocal: data.userLocal.split(" "),
+            userPhone: data.userPhone,
+            userSex: data.userSex,
+          });
+
+          setFileList([
+            {
+              uid: "-1",
+              name: "image.png",
+              status: "done",
+              url: data.userAvater,
+            },
+          ]);
+        } else {
+          message.error(res.message);
+        }
+      })
+      .catch((err) => {
+        message.error(err.message);
+      });
+  };
 
   const onFinish = (values: any) => {
     let userInfo = {
+      userAvater: fileList[0].url,
       userName: values.userName,
       userNickName: values.userName,
-      userPassword: MD5(values.userPassword).toString(),
       userPhone: values.userPhone,
-      userAvater:
-        "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fci.xiaohongshu.com%2F609d2a7d-2432-0cd7-0807-92ba965965c5%3FimageView2%2F2%2Fw%2F1080%2Fformat%2Fjpg&refer=http%3A%2F%2Fci.xiaohongshu.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1692691143&t=3492b26b1168a700841240ac277fff12",
       userSex: values.userSex,
       userLocal: values.userLocal.join(" "),
     };
+    if (values.userPassword != undefined && values.userPassword != "") {
+      Object.assign(userInfo, {
+        userPassword: MD5(values.userPassword).toString(),
+      });
+    }
+
+    let id = auth.user.user.userId;
 
     Request({
-      url: "/user",
-      method: "post",
+      url: "/user/" + id,
+      method: "put",
       data: userInfo,
     })
       .then((res: any) => {
@@ -92,14 +174,12 @@ function PrivateMsg() {
           message
             .open({
               type: "success",
-              content: "更新成功",
+              content: "修改成功",
               duration: 1,
             })
             .then(() => {
-              window.loginApi.closeRegister();
+              getData();
             });
-
-          // window.loginApi.closeRegister();
         } else {
           message.error(res.message);
         }
@@ -113,13 +193,29 @@ function PrivateMsg() {
     form.resetFields();
   };
 
+  useEffect(() => {
+    getData();
+  }, []);
+
+  useEffect(() => {
+    form.resetFields();
+  }, [user]);
+
   return (
     <div className="setting-page">
+      <Modal
+        open={previewOpen}
+        title={previewTitle}
+        footer={null}
+        onCancel={handleCancel}
+      >
+        <img alt="example" style={{ width: "100%" }} src={previewImage} />
+      </Modal>
       <Form
         form={form}
         name="normal_login"
         className="setting-form"
-        initialValues={{ remember: true }}
+        initialValues={user}
         onFinish={onFinish}
         labelCol={{ span: 4 }}
         labelAlign="left"
@@ -127,9 +223,36 @@ function PrivateMsg() {
         <Form.Item
           name="userAvatar"
           label="avatar"
-          rules={[{ required: true, message: "Please submit your Avatar!" }]}
+          rules={[
+            {
+              validator: (rule, value) => {
+                if (fileList.length == 0) {
+                  return Promise.reject("Please upload your avatar");
+                } else {
+                  return Promise.resolve();
+                }
+              },
+            },
+          ]}
         >
-          <Avatar />
+          <Upload
+            action={baseURL + "/test/upload"}
+            listType="picture-card"
+            method="post"
+            name="file"
+            accept=".png,.jpg,.svg"
+            maxCount={2}
+            defaultFileList={fileList}
+            onPreview={handlePreview}
+            onChange={handleChange}
+          >
+            {fileList.length == 0 ? (
+              <div>
+                <PlusOutlined rev={undefined} />
+                <div style={{ marginTop: 8 }}>Upload</div>
+              </div>
+            ) : null}
+          </Upload>
         </Form.Item>
         <Form.Item
           name="userName"
@@ -139,11 +262,7 @@ function PrivateMsg() {
           <Input placeholder="userName" disabled={true} />
         </Form.Item>
 
-        <Form.Item
-          name="userPassword"
-          label="password"
-          rules={[{ required: true, message: "Please input your Password!" }]}
-        >
+        <Form.Item name="userPassword" label="password">
           <Input.Password type="password" placeholder="Password" />
         </Form.Item>
 
@@ -151,7 +270,6 @@ function PrivateMsg() {
           name="password2"
           label="confirm"
           rules={[
-            { required: true, message: "Please input your Password again!" },
             ({ getFieldValue }) => ({
               validator(_, value) {
                 if (!value || getFieldValue("userPassword") === value) {
@@ -233,33 +351,33 @@ function PrivateMsg() {
   );
 }
 
-let tabs = [
-  {
-    key: "1",
-    label: "个人设置",
-    children: <PrivateMsg></PrivateMsg>,
-  },
-  {
-    key: "2",
-    label: "消息设置",
-    children: <PrivateMsg></PrivateMsg>,
-  },
-  {
-    key: "3",
-    label: "通用设置",
-    children: <PrivateMsg></PrivateMsg>,
-  },
-  {
-    key: "4",
-    label: "关于软件",
-    children: <PrivateMsg></PrivateMsg>,
-  },
-];
-
 function Setting() {
   let styles = {
     width: 200,
   };
+
+  const tabs = [
+    {
+      key: "1",
+      label: "个人设置",
+      children: <PrivateMsg></PrivateMsg>,
+    },
+    {
+      key: "2",
+      label: "消息设置",
+      children: "",
+    },
+    {
+      key: "3",
+      label: "通用设置",
+      children: "",
+    },
+    {
+      key: "4",
+      label: "关于软件",
+      children: "",
+    },
+  ];
 
   const [activeKey, setActiveKey] = useState(tabs[0]);
 

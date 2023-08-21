@@ -1,7 +1,9 @@
 import axios from "axios";
 //创建axios实例
+
+const baseURL = "http://localhost:3000";
 const Request = axios.create({
-  baseURL:"http://localhost:3000",
+  baseURL: baseURL,
   timeout: 10000, //请求超时时间
 });
 //请求拦截器
@@ -23,4 +25,4 @@ Request.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-export default Request;
+export { Request, baseURL };

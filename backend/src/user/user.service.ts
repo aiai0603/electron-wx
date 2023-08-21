@@ -30,11 +30,15 @@ export class UserService {
 
   findByName(name: string) {
     let qb = this.userRepository.createQueryBuilder();
-    return qb.where('user_nick_name = :name', { name: name }).getCount();
+    return qb.where('user_name = :name', { name: name }).getCount();
   }
 
   findOne(id: number) {
-    return this.userRepository.findByIds([id]);
+    return this.userRepository.findOne({
+      where: {
+        userId: id,
+      },
+    });
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {

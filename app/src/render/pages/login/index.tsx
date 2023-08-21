@@ -4,7 +4,7 @@ import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import chatLogo from "@/render/assets/2x.png";
 import { useAuth } from "@/render/auth/auth";
 import "./index.less";
-import Request from "../../http/axios";
+import { Request } from "../../http/axios";
 import MD5 from 'crypto-js/md5'
 
 function Login() {

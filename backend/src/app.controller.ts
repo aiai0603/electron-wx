@@ -1,8 +1,17 @@
-import { Controller, Get, Header, Sse, UploadedFile, UseInterceptors ,Post } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Header,
+  Sse,
+  UploadedFile,
+  UseInterceptors,
+  Post,
+} from '@nestjs/common';
 import { AppService } from './app.service';
 import { Observable, interval, map } from 'rxjs';
 import { Cron, Interval } from '@nestjs/schedule';
 import { FileInterceptor } from '@nestjs/platform-express';
+import * as fs from 'fs';
 
 @Controller('test')
 export class AppController {
@@ -21,7 +30,7 @@ export class AppController {
   @Post('upload')
   @UseInterceptors(FileInterceptor('file'))
   uploadFile(@UploadedFile() file: Express.Multer.File) {
-    console.log(file);
+    return file.path.replace('static', 'public');
   }
 
   @Get()

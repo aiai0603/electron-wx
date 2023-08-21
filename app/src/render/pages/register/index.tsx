@@ -3,8 +3,8 @@ import { Button, Form, Input, Radio, Cascader, Select, message } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import "./index.less";
 import { useEffect, useRef, useState } from "react";
-import Request from "../../http/axios";
-import MD5 from 'crypto-js/md5'
+import { Request } from "../../http/axios";
+import MD5 from "crypto-js/md5";
 
 const { Option } = Select;
 
@@ -64,7 +64,6 @@ function Register() {
   const scode = useRef(null);
 
   const onFinish = (values: any) => {
-
     let userInfo = {
       userName: values.userName,
       userNickName: values.userName,

@@ -10,6 +10,8 @@ import { AuthModule } from './jwt/auth.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { ResponseInterceptor } from 'common/respone.interceptor';
 import { HttpExceptionFilter } from 'common/userException.filter';
+import { MulterModule } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -28,18 +30,28 @@ import { HttpExceptionFilter } from 'common/userException.filter';
     UserModule,
     AuthModule,
     ScheduleModule.forRoot(),
+    MulterModule.register({
+      storage: diskStorage({
+        // 配置文件上传后的文件夹路径
+        destination: `./static/`,
+        filename: (req, file, cb) => {
+          // 在此处自定义保存后的文件名称
+          const filename = `${new Date().getTime()}_${file.originalname}`;
+          return cb(null, filename);
+        },
+      }),
+    }),
   ],
   controllers: [AppController],
   providers: [
     {
       provide: APP_INTERCEPTOR,
       useClass: ErrorsInterceptor,
-    }
+    },
     // {
     //   provide: APP_FILTER,
     //   useClass: HttpExceptionFilter,
     // },
-    ,
     {
       provide: APP_INTERCEPTOR,
       useClass: ResponseInterceptor,
