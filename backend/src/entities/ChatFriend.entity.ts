@@ -23,12 +23,18 @@ export class ChatFriend {
   @Column("varchar", { name: "friend_name", length: 255 })
   friendName: string;
 
-  @Column("tinyint", { name: "frined_from" })
-  frinedFrom: number;
+  @Column("tinyint", { name: "friend_from" })
+  friendFrom: number;
 
   @Column("datetime", { name: "send_time" })
   sendTime: Date;
 
   @Column("tinyint", { name: "delete_flag" })
   deleteFlag: number;
+
+  @Column("tinyint", { name: "friend_state" })
+  friendState: number;
+
+  @Column("tinyint", { name: "friend_msg" })
+  friendMsg: string;
 }

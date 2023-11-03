@@ -16,8 +16,6 @@ function content() {
     });
   };
 
-  console.log(auth.user);
-
   return (
     <div className="msg-card">
       <div className="msg-top">
@@ -28,7 +26,7 @@ function content() {
             {auth.user.user.userNickName ? (
               <ManOutlined rev={undefined} className="nick-sex" />
             ) : (
-              <WomanOutlined  rev={undefined} className="nick-sex2"/> 
+              <WomanOutlined rev={undefined} className="nick-sex2" />
             )}
           </div>
           <p>用户名: {auth.user.user.userNickName}</p>

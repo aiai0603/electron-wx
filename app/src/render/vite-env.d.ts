@@ -5,6 +5,7 @@ declare global {
     electronMessagePort:any;
     headerApi:any;
     loginApi:any;
+    friendApi:any;
   }
 }
 

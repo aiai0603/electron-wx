@@ -5,34 +5,47 @@
   // 允许拖动应用
   -webkit-app-region: drag;
 
-  &-left{
+  &-left {
     width: 305px;
     text-align: left;
     border-right: #d9d9d9 1px solid;
+    display: flex;
+    flex-flow: row;
 
-    &-main{
+    &-main {
       background-color: transparent;
       width: 56px;
-      .header-left-span{
+      .header-left-span {
         background-color: transparent;
       }
-
-     
+      .header-network {
+        display: none;
+      }
     }
-    &-span{
+    &-span {
       height: 100%;
       background-color: #434343;
       width: 56px;
-
     }
+  }
+
+  &-network {
+    font-size: 12px;
+    width: 100px;
+    height: 100%;
+    display: flex;
+    flex-flow: row;
+    justify-content: center;
+    align-items: center;
+    
   }
 
   span {
     font-size: 14px;
-    padding:8px;
+    padding: 8px;
     -webkit-app-region: no-drag;
 
-    :hover{
+    :hover {
       background-color: #eee;
     }
   }

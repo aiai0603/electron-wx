@@ -12,6 +12,10 @@ import { ResponseInterceptor } from 'common/respone.interceptor';
 import { HttpExceptionFilter } from 'common/userException.filter';
 import { MulterModule } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
+import { FriendModule } from './friend/friend.module';
+import { SocketModule } from './socket/socket.module';
+
+
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -41,6 +45,8 @@ import { diskStorage } from 'multer';
         },
       }),
     }),
+    FriendModule,
+    SocketModule
   ],
   controllers: [AppController],
   providers: [

@@ -36,6 +36,25 @@
   &-content {
     flex: 1;
     width: 100%;
+    display: flex;
+    flex-flow: column;
+    flex-wrap: nowrap;
+    overflow-y: scroll;
+    padding-right: 8px;
+
+    &::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background-color: transparent;
+      border-radius: 100px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: #d9d9d9;
+      border-radius: 100px;
+    }
   }
 
   &-area {
@@ -96,6 +115,109 @@
     padding: 4px 24px;
     background-color: #f5f5f5;
   }
-  
 }
 
+.chat-test {
+  position: fixed;
+  right: -100px;
+  top: 0;
+}
+
+.chat-box {
+  display: flex;
+  flex-flow: row;
+  padding-left: 12px;
+  width: 100%;
+
+  &-img {
+    width: 40px;
+    height: 40px;
+    margin-top: 8px;
+    flex-shrink: 0;
+  }
+
+  &-item {
+    position: relative;
+    margin: 8px 96px 8px 16px;
+    padding: 12px;
+    min-width: 20px;
+    max-width: 960px;
+    color: #555;
+    font-size: 12px;
+    background: #eeeeee;
+    border-radius: 5px;
+    min-height: 40px;
+    display: flex;
+    flex-flow: row;
+    justify-content: flex-start;
+    align-items: center;
+
+    border: #eeeeee 1px solid;
+
+    &:before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: -15px;
+      margin-top: -5px;
+      border: 5px solid transparent;
+      border-right: 10px solid #eeeeee;
+    }
+  }
+
+  &-item p {
+    margin: 0;
+    padding: 0;
+    word-break: break-all;
+  }
+}
+
+.chat-box-mine {
+  display: flex;
+  flex-flow: row;
+  justify-content: flex-end;
+  padding-left: 12px;
+  width: 100%;
+
+  &-img {
+    width: 40px;
+    height: 40px;
+    margin-top: 8px;
+    flex-shrink: 0;
+  }
+
+  &-item {
+    position: relative;
+    margin: 8px 16px 8px 96px;
+    padding: 12px;
+    min-width: 20px;
+    max-width: 960px;
+    color: #555;
+    font-size: 12px;
+    background: #eeeeee;
+    border-radius: 5px;
+    min-height: 40px;
+    display: flex;
+    flex-flow: row;
+    justify-content: flex-end;
+    align-items: center;
+
+    border: #eeeeee 1px solid;
+
+    &:before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      right: -15px;
+      margin-top: -5px;
+      border: 5px solid transparent;
+      border-left: 10px solid #eeeeee;
+    }
+  }
+
+  &-item p {
+    margin: 0;
+    padding: 0;
+    word-break: break-all;
+  }
+}

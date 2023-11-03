@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Query } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ChatUser } from 'src/entities/ChatUser.entity';
 import { Repository } from 'typeorm';
+import { ChatFriend } from 'src/entities/ChatFriend.entity';
 
 @Injectable()
 export class UserService {
@@ -31,6 +32,12 @@ export class UserService {
   findByName(name: string) {
     let qb = this.userRepository.createQueryBuilder();
     return qb.where('user_name = :name', { name: name }).getCount();
+  }
+
+  findByNameOrPhone(key: string) {
+    return this.userRepository.find({
+      where: [{ userName: key }, { userPhone: key }],
+    });
   }
 
   findOne(id: number) {

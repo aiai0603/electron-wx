@@ -11,6 +11,8 @@ import Friend from "../pages/friend";
 import Login from "../pages/login";
 import Register from "../pages/register";
 import Setting from "../pages/setting";
+import AddFriend from "../pages/addfriend";
+import FreApplication from "../pages/FreApplication";
 const routes = [
   {
     path: "/login",
@@ -29,6 +31,18 @@ const routes = [
     type: "hidden",
     element: <Register />,
     key: "注册",
+  },
+  {
+    path: "/addfriend",
+    type: "hidden",
+    element: <AddFriend />,
+    key: "添加好友",
+  },
+  {
+    path: "/friendApplication",
+    type: "hidden",
+    element: <FreApplication />,
+    key: "好友申请",
   },
   {
     path: "/",

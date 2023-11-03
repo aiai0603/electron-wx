@@ -1,15 +1,28 @@
-import { useState, type FC } from "react";
-import { Avatar, Card, Skeleton, Statistic, Divider, Input } from "antd";
+import { useState, type FC, useEffect } from "react";
+import {
+  Avatar,
+  Card,
+  Skeleton,
+  Statistic,
+  Divider,
+  Input,
+  message,
+  Drawer,
+} from "antd";
 import ChatMain from "../ChatMain";
 import "./index.less";
 import { PlusOutlined, SearchOutlined } from "@ant-design/icons";
 import { createFromIconfontCN } from "@ant-design/icons";
+import { Request, baseURL } from "../../http/axios";
 
 const IconFont = createFromIconfontCN({
   scriptUrl: ["//at.alicdn.com/t/c/font_3876279_f9c77gdokpi.js"],
 });
 
-function ChatList() {
+
+
+
+function ChatList(prop: any) {
   const [search, useSearch] = useState(false);
 
   const onChange = (
@@ -36,8 +49,8 @@ function ChatList() {
         <div className="chat-search-result"></div>
       ) : (
         <div className="chat-list-cards">
-          <ChatCard top={true}></ChatCard>
-          <ChatCard></ChatCard>
+          <ChatCard top={true} handleClick={prop.handleClick}></ChatCard>
+          <ChatCard handleClick={prop.handleClick}></ChatCard>
         </div>
       )}
     </div>
@@ -45,8 +58,20 @@ function ChatList() {
 }
 
 function ChatCard(prop: any) {
+  const handleChat = (id: number, group: boolean) => {
+    prop.handleClick({
+      group: group,
+      id: id,
+    });
+  };
+
   return (
-    <div className={prop.top ? "card-page top-chat" : "card-page"}>
+    <div
+      className={prop.top ? "card-page top-chat" : "card-page"}
+      onClick={() => {
+        handleChat(20, false);
+      }}
+    >
       <div className="card-left">
         <div className="card-img"></div>
       </div>
@@ -69,10 +94,28 @@ function ChatCard(prop: any) {
 }
 
 function Chat() {
+  const [data, setData] = useState({
+    group: false,
+    id: 4,
+  });
+
+  const [open, setOpen] = useState(false);
+
+  const showDrawer = () => {
+    setOpen(true);
+  };
+
+  const onClose = () => {
+    setOpen(false);
+  };
+
   return (
     <div className="chat-page">
-      <ChatList></ChatList>
-      <ChatMain group={true} id={"1"}></ChatMain>
+      <Drawer closable={false} placement="right" onClose={onClose} open={open}>
+        <div></div>
+      </Drawer>
+      <ChatList handleClick={setData}></ChatList>
+      <ChatMain data={data} handleShowDraw={showDrawer}></ChatMain>
     </div>
   );
 }

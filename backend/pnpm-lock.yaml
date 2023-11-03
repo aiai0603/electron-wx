@@ -39,6 +39,7 @@ specifiers:
   prettier: ^2.8.8
   reflect-metadata: ^0.1.13
   rxjs: ^7.8.1
+  socket.io: ^4.7.2
   source-map-support: ^0.5.21
   supertest: ^6.3.3
   swagger-ui-express: ^5.0.0
@@ -70,6 +71,7 @@ dependencies:
   passport-local: 1.0.0
   reflect-metadata: 0.1.13
   rxjs: 7.8.1
+  socket.io: 4.7.2
   swagger-ui-express: 5.0.0
   typeorm: 0.3.17_zgesoo44bsskoihzxefv3rsejm
 
@@ -1522,7 +1524,7 @@ packages:
     resolution: {integrity: sha512-pu0sN9m5VjCxBZVK8hW37ZcMe8rjn4HHggBN5CbaRTvFwv5jOmuIRZEuddsBPa9Th0ts0SIo3Niukq+95cMBbQ==}
     deprecated: This is a stub types definition. socket.io provides its own type definitions, so you do not need this installed.
     dependencies:
-      socket.io: 4.7.1
+      socket.io: 4.7.2
     transitivePeerDependencies:
       - bufferutil
       - supports-color
@@ -2606,6 +2608,10 @@ packages:
     resolution: {integrity: sha512-enySgNiK5tyZFynt3z7iqBR+Bto9EVVVvDFuTT0ioHCGbzirZVGDGiQjZzEp8hWl6hd5FSVytJGuScX1C1C35w==}
     engines: {node: '>=10.0.0'}
 
+  /engine.io-parser/5.2.1:
+    resolution: {integrity: sha512-9JktcM3u18nU9N2Lz3bWeBgxVgOKpw7yhRaoxQA3FUDZzzw+9WlA6p4G4u0RixNkg14fH7EfEc/RhpurtiROTQ==}
+    engines: {node: '>=10.0.0'}
+
   /engine.io/6.5.1:
     resolution: {integrity: sha512-mGqhI+D7YxS9KJMppR6Iuo37Ed3abhU8NdfgSvJSDUafQutrN+sPTncJYTyM9+tkhSmWodKtVYGPPHyXJEwEQA==}
     engines: {node: '>=10.0.0'}
@@ -2619,6 +2625,25 @@ packages:
       cors: 2.8.5
       debug: 4.3.4
       engine.io-parser: 5.1.0
+      ws: 8.11.0
+    transitivePeerDependencies:
+      - bufferutil
+      - supports-color
+      - utf-8-validate
+
+  /engine.io/6.5.2:
+    resolution: {integrity: sha512-IXsMcGpw/xRfjra46sVZVHiSWo/nJ/3g1337q9KNXtS6YRzbW5yIzTCb9DjhrBe7r3GZQR0I4+nq+4ODk5g/cA==}
+    engines: {node: '>=10.2.0'}
+    dependencies:
+      '@types/cookie': 0.4.1
+      '@types/cors': 2.8.13
+      '@types/node': 20.4.2
+      accepts: 1.3.8
+      base64id: 2.0.0
+      cookie: 0.4.2
+      cors: 2.8.5
+      debug: 4.3.4
+      engine.io-parser: 5.2.1
       ws: 8.11.0
     transitivePeerDependencies:
       - bufferutil
@@ -4979,6 +5004,22 @@ packages:
       cors: 2.8.5
       debug: 4.3.4
       engine.io: 6.5.1
+      socket.io-adapter: 2.5.2
+      socket.io-parser: 4.2.4
+    transitivePeerDependencies:
+      - bufferutil
+      - supports-color
+      - utf-8-validate
+
+  /socket.io/4.7.2:
+    resolution: {integrity: sha512-bvKVS29/I5fl2FGLNHuXlQaUH/BlzX1IN6S+NKLNZpBsPZIDH+90eQmCs2Railn4YUiww4SzUedJ6+uzwFnKLw==}
+    engines: {node: '>=10.2.0'}
+    dependencies:
+      accepts: 1.3.8
+      base64id: 2.0.0
+      cors: 2.8.5
+      debug: 4.3.4
+      engine.io: 6.5.2
       socket.io-adapter: 2.5.2
       socket.io-parser: 4.2.4
     transitivePeerDependencies:

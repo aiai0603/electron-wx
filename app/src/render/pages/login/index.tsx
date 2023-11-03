@@ -5,7 +5,7 @@ import chatLogo from "@/render/assets/2x.png";
 import { useAuth } from "@/render/auth/auth";
 import "./index.less";
 import { Request } from "../../http/axios";
-import MD5 from 'crypto-js/md5'
+import MD5 from "crypto-js/md5";
 
 function Login() {
   let navigate = useNavigate();
@@ -13,15 +13,15 @@ function Login() {
   let auth = useAuth();
 
   const onFinish = (values: any) => {
-    
     Request({
       url: "/auth/getToken",
       method: "post",
       data: {
-        name:values.username,
-        password:MD5(values.password).toString(),
+        name: values.username,
+        password: MD5(values.password).toString(),
       },
-    }).then((res: any) => {
+    })
+      .then((res: any) => {
         if (res && res.code == "200") {
           message
             .open({

@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
+import { logger } from 'middleware/logger';
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.enableCors();
@@ -16,6 +17,7 @@ async function bootstrap() {
   app.useStaticAssets('static', {
     prefix: '/public/'
   })
+  app.use(logger)
 
   await app.listen(3000);
 }

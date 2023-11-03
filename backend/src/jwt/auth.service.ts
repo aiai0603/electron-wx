@@ -24,7 +24,6 @@ export class AuthService {
     if (!data) {
       throw new UserException(10001, '账号或者密码错误');
     } else {
-      delete data.userPassword;
       return {
         msg: '登录成功',
         data: {

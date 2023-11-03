@@ -70,7 +70,7 @@ function Register() {
       userPassword: MD5(values.userPassword).toString(),
       userPhone: values.userPhone,
       userAvater:
-        "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fci.xiaohongshu.com%2F609d2a7d-2432-0cd7-0807-92ba965965c5%3FimageView2%2F2%2Fw%2F1080%2Fformat%2Fjpg&refer=http%3A%2F%2Fci.xiaohongshu.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1692691143&t=3492b26b1168a700841240ac277fff12",
+        "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fc-ssl.duitang.com%2Fuploads%2Fitem%2F202002%2F11%2F20200211233823_bligy.thumb.1000_0.jpg&refer=http%3A%2F%2Fc-ssl.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1701569487&t=198fab0c6bad33b0e45cb2c20c8bacb7",
       userSex: values.userSex,
       userLocal: values.userLocal.join(" "),
     };
